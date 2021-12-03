@@ -6,15 +6,20 @@
 typedef struct TNode* Position;
 typedef Position BinTree;
 struct TNode {
-    int data;
-    BinTree left;
-    BinTree right;
+    int key;
+    Position parent;
+    Position left;
+    Position right;
 };
 
-BinTree binTreeSearch_insert(BinTree root, int data);
-BinTree binTreeSearch_search(BinTree root, int data);
-void binTreeSearch_delete(BinTree root, int data);
-BinTree binTreeSearch_find_min(BinTree root);
-BinTree binTreeSearch_find_max(BinTree root);
+typedef struct BinSearchTree {
+    Position root;
+} *BinSearchTree;
+
+void binTreeSearch_insert(BinSearchTree T, Position z);
+Position binTreeSearch_search(BinSearchTree T, int key);
+void binTreeSearch_delete(BinSearchTree T, Position z);
+Position binTreeSearch_find_min(BinSearchTree T);
+Position binTreeSearch_find_max(BinSearchTree T);
 
 #endif

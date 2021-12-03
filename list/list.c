@@ -11,8 +11,8 @@
 List list_new(void) {
     List a = NULL;
     a = calloc(1, sizeof(struct __list));
-    a->start = malloc(sizeof(struct __list_node));
-    a->end = malloc(sizeof(struct __list_node));
+    a->start = calloc(1, sizeof(struct __list_node));
+    a->end = calloc(1, sizeof(struct __list_node));
     // init
     a->start->pre = NULL; a->start->next = a->end;
     a->end->pre = a->start; a->end->next = NULL;
@@ -21,7 +21,7 @@ List list_new(void) {
 ListNode list_find_kth(int k, List L) {
     if (k < 0) return NULL;
     ListNode target = L->start;
-    for (int i = 0; i < k + 1; i++) {
+    for (int i = 0; i <= k; ++i) {
         if (target->next == L->end) {
             return NULL;
         } else {
