@@ -68,7 +68,7 @@ void RedBlackTree::delete_node(Node *target) {
   } else {
     y = tree_minimum(target->right);
     original_color = y->color;
-    replace_target = y->right;
+    replace_target = y->right; // y是被删除的对象，replace_target是y的替代者
     if (target == y->parent) {
       replace_target->parent = y;
     } else {
@@ -82,7 +82,7 @@ void RedBlackTree::delete_node(Node *target) {
     y->color = target->color;
   }
   if (original_color == BLACK)
-    rb_remove_fixup(replace_target);
+    rb_remove_fixup(replace_target); // 解决replace_target的双黑问题
 }
 
 void RedBlackTree::rb_insert_fixup(Node *z) {
