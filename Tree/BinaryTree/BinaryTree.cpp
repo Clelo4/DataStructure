@@ -5,60 +5,67 @@
 #include "BinaryTree.h"
 
 void _delete_binary_tree(Node *root) {
-  if (root == NULL) return;
+  if (root == NULL)
+    return;
   _delete_binary_tree(root->left);
   _delete_binary_tree(root->right);
   free(root);
 }
 
-BinaryTree::~BinaryTree() {
-  _delete_binary_tree(root);
-}
+BinaryTree::~BinaryTree() { _delete_binary_tree(root); }
 
 // 递归实现
 void __pre_order_traversal_recure(Node *root) {
-  if (root == NULL) return;
+  if (root == NULL)
+    return;
   printf("%d ", root->key);
   __pre_order_traversal_recure(root->left);
   __pre_order_traversal_recure(root->right);
 }
 void __in_order_traversal_recure(Node *root) {
-  if (root == NULL) return;
-    __in_order_traversal_recure(root->left);
-    printf("%d ", root->key);
-    __in_order_traversal_recure(root->right);
+  if (root == NULL)
+    return;
+  __in_order_traversal_recure(root->left);
+  printf("%d ", root->key);
+  __in_order_traversal_recure(root->right);
 }
 void __post_order_traversal_recure(Node *root) {
-  if (root == NULL) return;
-    __post_order_traversal_recure(root->left);
-    __post_order_traversal_recure(root->right);
-    printf("%d ", root->key);
+  if (root == NULL)
+    return;
+  __post_order_traversal_recure(root->left);
+  __post_order_traversal_recure(root->right);
+  printf("%d ", root->key);
 }
 
 int __tree_hight_recure(Node *root) {
-  if (root == NULL) return 0;
+  if (root == NULL)
+    return 0;
   int left_hight = __tree_hight_recure(root->left);
-  int right_hight =  __tree_hight_recure(root->right);
+  int right_hight = __tree_hight_recure(root->right);
   return (left_hight > right_hight) ? (left_hight + 1) : (right_hight + 1);
 }
 
 // 迭代实现，使用堆栈实现
 void __pre_order_traversal_iterate(Node *root) {
-  if (root == NULL) return;
-  std::stack<Node*> s;
+  if (root == NULL)
+    return;
+  std::stack<Node *> s;
   Node *target = root;
   s.push(target);
   while (!s.empty()) {
     target = s.top();
     s.pop();
     printf("%d ", target->key);
-    if (target->right) s.push(target->right);
-    if (target->left) s.push(target->left);
+    if (target->right)
+      s.push(target->right);
+    if (target->left)
+      s.push(target->left);
   }
 }
 void __in_order_traversal_iterate(Node *root) {
-  if (root == NULL) return;
-  std::stack<Node*> s;
+  if (root == NULL)
+    return;
+  std::stack<Node *> s;
   Node *target = root;
   while (1) {
     while (target) {
@@ -76,8 +83,9 @@ void __in_order_traversal_iterate(Node *root) {
   }
 }
 void __post_order_traversal_iterate(Node *root) {
-  if (root == NULL) return;
-  std::stack<Node*> s;
+  if (root == NULL)
+    return;
+  std::stack<Node *> s;
   Node *target = root;
   Node *pre = NULL;
   while (1) {
@@ -85,19 +93,22 @@ void __post_order_traversal_iterate(Node *root) {
       s.push(target);
       target = target->left;
     }
-    if (s.empty()) break;
+    if (s.empty())
+      break;
     Node *current = s.top();
     if (current->right == NULL || pre == current->right) {
       pre = current;
       s.pop();
       printf("%d ", pre->key);
-    } else if (current->right) target = current->right;
+    } else if (current->right)
+      target = current->right;
   }
 }
 
 void BinaryTree::level_order_traversal() {
-  if (this->root == NULL) return;
-  std::queue<Node*> q;
+  if (this->root == NULL)
+    return;
+  std::queue<Node *> q;
   q.push(this->root);
   while (!q.empty()) {
     Node *target = q.front();
@@ -138,6 +149,4 @@ void BinaryTree::post_order_traversal() {
 #endif
 }
 
-int BinaryTree::binary_tree_height() {
-  return __tree_hight_recure(this->root);
-}
+int BinaryTree::binary_tree_height() { return __tree_hight_recure(this->root); }

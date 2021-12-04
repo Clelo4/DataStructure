@@ -12,19 +12,19 @@
 #include <stdlib.h>
 
 struct __list_node;
-typedef struct __list_node* ListNode;
+typedef struct __list_node *ListNode;
 struct __list_node {
-    ListNode pre;
-    ListNode next;
-    int data;
+  ListNode pre;
+  ListNode next;
+  int data;
 };
 
 struct __list {
-    ListNode start; // 哨兵节点
-    ListNode end; // 哨兵节点
+  ListNode start; // 哨兵节点
+  ListNode end;   // 哨兵节点
 };
 
-typedef struct __list* List;
+typedef struct __list *List;
 
 // 初始化一个空线性表L;
 List list_new(void);

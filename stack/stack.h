@@ -11,17 +11,17 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-typedef struct __stack_node* Stack_Node;
+typedef struct __stack_node *Stack_Node;
 struct __stack_node {
-    int data;
-    Stack_Node pre;
+  int data;
+  Stack_Node pre;
 };
 
-typedef struct stack* Stack;
+typedef struct stack *Stack;
 struct stack {
-    int size;
-    Stack_Node top;
-    int MaxSize;
+  int size;
+  Stack_Node top;
+  int MaxSize;
 };
 // 创建一个stack
 Stack stack_new(int);

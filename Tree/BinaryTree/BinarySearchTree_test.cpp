@@ -5,7 +5,7 @@
 
 int main() {
   BinarySearchTree *tree = new BinarySearchTree();
-  int test_data[] = { 13, 123, 123, 435, 53, 1023, 1, 123, -13, -133, 12313, 1, 2, 3 };
+  int test_data[] = {13, 123, 123, 435, 53, 1023, 1, 123, -13, -133, 12313, 1, 2, 3};
   int len = sizeof(test_data) / sizeof(int);
   for (int i = 0; i < len; ++i) {
     tree->insert_node(new Node(test_data[i]));

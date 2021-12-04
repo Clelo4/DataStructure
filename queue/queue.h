@@ -11,19 +11,19 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-typedef struct __queue_node* Queue_Node;
+typedef struct __queue_node *Queue_Node;
 struct __queue_node {
-    int data;
-    Queue_Node next;
-    Queue_Node pre;
+  int data;
+  Queue_Node next;
+  Queue_Node pre;
 };
 
-typedef struct queue* Queue;
+typedef struct queue *Queue;
 struct queue {
-    int length;
-    int maxSize;
-    Queue_Node first;
-    Queue_Node last;
+  int length;
+  int maxSize;
+  Queue_Node first;
+  Queue_Node last;
 };
 // 创建一个队列
 Queue queue_new(int);

@@ -7,12 +7,12 @@
 class BinarySearchTree : public BinaryTree {
 public:
   void insert_node(Node *);
-  Node* search_key(int);
+  Node *search_key(int);
   void delete_node(Node *);
   Node *tree_minimum(Node *);
   Node *tree_maxmum(Node *x);
-  Node* find_min();
-  Node* find_max();
+  Node *find_min();
+  Node *find_max();
 };
 
 #endif // __BinarySearchTree_H__

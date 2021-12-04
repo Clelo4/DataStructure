@@ -1,7 +1,7 @@
 #ifndef __MAX_HEAP_H
 #define __MAX_HEAP_H
 
-typedef struct _MaxHeap* MaxHeap;
+typedef struct _MaxHeap *MaxHeap;
 struct _MaxHeap {
   int *arr;
   int size;

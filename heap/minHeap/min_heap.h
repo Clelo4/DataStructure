@@ -1,11 +1,11 @@
 #ifndef _MIN_HEAP_H
 #define _MIN_HEAP_H
 
-typedef struct _MinHeap* MinHeap;
+typedef struct _MinHeap *MinHeap;
 struct _MinHeap {
-  int* arr;
+  int *arr;
   int size;
-  int capacity;  
+  int capacity;
 };
 
 MinHeap create_min_heap(int);
