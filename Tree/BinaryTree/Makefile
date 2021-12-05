@@ -21,6 +21,10 @@ $(DEBUG_DIR)/AVLTree_test.o: AVLTree_test.cpp
 	$(cc) $(CFLAGS) -c $^ -o $@
 $(DEBUG_DIR)/AVLTree.o: AVLTree.cpp
 	$(cc) $(CFLAGS) -c $^ -o $@
+$(DEBUG_DIR)/SplayTree_test.o: SplayTree_test.cpp
+	$(cc) $(CFLAGS) -c $^ -o $@
+$(DEBUG_DIR)/SplayTree.o: SplayTree.cpp
+	$(cc) $(CFLAGS) -c $^ -o $@
 
 $(DEBUG_DIR)/BinaryTree: $(DEBUG_DIR)/BinaryTree_test.o $(DEBUG_DIR)/BinaryTree.o
 	$(cc) $(CFLAGS) $^ -o $@
@@ -29,6 +33,8 @@ $(DEBUG_DIR)/BinarySearchTree: $(DEBUG_DIR)/BinarySearchTree_test.o $(DEBUG_DIR)
 $(DEBUG_DIR)/RedBlackTree:  $(DEBUG_DIR)/RedBlackTree_test.o $(DEBUG_DIR)/RedBlackTree.o
 	$(cc) $(CFLAGS) $^ -o $@
 $(DEBUG_DIR)/AVLTree: $(DEBUG_DIR)/AVLTree_test.o $(DEBUG_DIR)/AVLTree.o $(DEBUG_DIR)/BinarySearchTree.o $(DEBUG_DIR)/BinaryTree.o
+	$(cc) $(CFLAGS) $^ -o $@
+$(DEBUG_DIR)/SplayTree: $(DEBUG_DIR)/SplayTree_test.o $(DEBUG_DIR)/SplayTree.o $(DEBUG_DIR)/BinarySearchTree.o $(DEBUG_DIR)/BinaryTree.o
 	$(cc) $(CFLAGS) $^ -o $@
 
 BinaryTree:
@@ -39,6 +45,8 @@ RedBlackTree:
 	make clean && make $(DEBUG_DIR)/RedBlackTree && $(DEBUG_DIR)/RedBlackTree
 AVLTree:
 	make clean && make $(DEBUG_DIR)/AVLTree && $(DEBUG_DIR)/AVLTree
+SplayTree:
+	make clean && make $(DEBUG_DIR)/SplayTree && $(DEBUG_DIR)/SplayTree
 
 clean:
 	-rm -rf $(DEBUG_DIR)
