@@ -33,6 +33,7 @@ public:
     root = nil = new Node(0, BLACK);
     nil->parent = nil->left = nil->right = nil;
   }
+  ~RedBlackTree();
   Node *search_key(int);
   void insert_node(Node *);
   void delete_node(Node *);
@@ -63,6 +64,7 @@ private:
   void __pre_order_traversal_recure(Node *);
   void __in_order_traversal(Node *);
   void __post_order_traversal(Node *t);
+  void _delete_binary_tree(Node *t);
   inline Node *tree_minimum(Node *x) {
     if (x == NULL || x == nil)
       return NULL;

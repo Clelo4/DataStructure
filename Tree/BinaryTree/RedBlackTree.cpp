@@ -242,3 +242,16 @@ int RedBlackTree::__binary_tree_height(Node *t) {
   int right_hight = __binary_tree_height(t->right);
   return (left_hight > right_hight) ? (left_hight + 1) : (right_hight + 1);
 }
+
+void RedBlackTree::_delete_binary_tree(Node *root) {
+  if (root == nil)
+    return;
+  _delete_binary_tree(root->left);
+  _delete_binary_tree(root->right);
+  free(root);
+}
+
+RedBlackTree::~RedBlackTree() {
+  _delete_binary_tree(root);
+  free(nil);
+}
