@@ -23,7 +23,7 @@ $(DEBUG_DIR)/BinaryTree: $(DEBUG_DIR)/BinaryTree_test.o $(DEBUG_DIR)/BinaryTree.
 	$(cc) $(CFLAGS) $^ -o $@
 $(DEBUG_DIR)/BinarySearchTree: $(DEBUG_DIR)/BinarySearchTree_test.o $(DEBUG_DIR)/BinarySearchTree.o $(DEBUG_DIR)/BinaryTree.o
 	$(cc) $(CFLAGS) $^ -o $@
-$(DEBUG_DIR)/RedBlackTree:  $(DEBUG_DIR)/RedBlackTree_test.o $(DEBUG_DIR)/RedBlackTree.o $(DEBUG_DIR)/BinarySearchTree.o $(DEBUG_DIR)/BinaryTree.o
+$(DEBUG_DIR)/RedBlackTree:  $(DEBUG_DIR)/RedBlackTree_test.o $(DEBUG_DIR)/RedBlackTree.o
 	$(cc) $(CFLAGS) $^ -o $@
 
 BinaryTree:
