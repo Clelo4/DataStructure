@@ -17,7 +17,7 @@ public:
   Node *left;
   Node *right;
   int level;
-  Node(int k) : key(k), parent(NULL), left(NULL), right(NULL), level(0) {}
+  Node(int k) : key(k), parent(NULL), left(NULL), right(NULL), level(1) {}
 };
 
 class BinaryTree {
