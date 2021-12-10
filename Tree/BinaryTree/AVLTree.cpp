@@ -2,20 +2,6 @@
 #include <assert.h>
 #include "AVLTree.h"
 
-#define IsLChild(x) ((x)->parent->left == x)
-#define IsRChild(x) ((x)->parent->right == x)
-#define TRANSPLANT(T, u, v)                                                                                            \
-  {                                                                                                                    \
-    if (u->parent == NULL)                                                                                             \
-      T->root = v;                                                                                                     \
-    else if (u == u->parent->left)                                                                                     \
-      u->parent->left = v;                                                                                             \
-    else                                                                                                               \
-      u->parent->right = v;                                                                                            \
-    if (v != NULL)                                                                                                     \
-      v->parent = u->parent;                                                                                           \
-  }
-
 bool _AvlBalanced(Node *x) {
   if (x == NULL)
     return true;

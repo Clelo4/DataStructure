@@ -2,7 +2,7 @@
 
 CUR_DIR = $(shell pwd)
 DEBUG_DIR = $(CUR_DIR)/debug
-CFLAGS = -g -D USE_TRAVERSAL_ITERATE=1 -D DEBUG=true
+CFLAGS = -g -D USE_TRAVERSAL_ITERATE=1 -D DEBUG=true --std=c++11
 cc = g++
 
 $(DEBUG_DIR)/BinaryTree.o: BinaryTree.cpp

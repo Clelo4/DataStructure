@@ -1,17 +1,5 @@
 #include "BinarySearchTree.h"
 
-#define TRANSPLANT(T, u, v)                                                                                            \
-  {                                                                                                                    \
-    if (u->parent == NULL)                                                                                             \
-      T->root = v;                                                                                                     \
-    else if (u == u->parent->left)                                                                                     \
-      u->parent->left = v;                                                                                             \
-    else                                                                                                               \
-      u->parent->right = v;                                                                                            \
-    if (v != NULL)                                                                                                     \
-      v->parent = u->parent;                                                                                           \
-  }
-
 Node *BinarySearchTree::tree_minimum(Node *x) {
   if (x == NULL)
     return NULL;

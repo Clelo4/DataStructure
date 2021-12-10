@@ -10,6 +10,29 @@
 
 #include <stdlib.h>
 
+#define IsLChild(x)                                                                                                    \
+  ({                                                                                                                   \
+    auto _x = x;                                                                                                       \
+    _x->parent->left == x;                                                                                             \
+  })
+
+#define IsRChild(x)                                                                                                    \
+  ({                                                                                                                   \
+    auto _x = x;                                                                                                       \
+    _x->parent->right == _x;                                                                                           \
+  })
+
+#define TRANSPLANT(T, u, v)                                                                                            \
+  {                                                                                                                    \
+    if (u->parent == NULL)                                                                                             \
+      T->root = v;                                                                                                     \
+    else if (u == u->parent->left)                                                                                     \
+      u->parent->left = v;                                                                                             \
+    else                                                                                                               \
+      u->parent->right = v;                                                                                            \
+    if (v != NULL)                                                                                                     \
+      v->parent = u->parent;                                                                                           \
+  }
 class Node {
 public:
   int key;
