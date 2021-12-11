@@ -5,6 +5,14 @@ DEBUG_DIR = $(CUR_DIR)/debug
 CFLAGS = -g -D USE_TRAVERSAL_ITERATE=1 -D DEBUG=true --std=c++11
 cc = g++
 
+all:
+	make clean
+	make BinarySearchTree
+	make BinaryTree
+	make RedBlackTree
+	make AVLTree
+	make SplayTree
+
 $(DEBUG_DIR)/BinaryTree.o: BinaryTree.cpp
 	$(cc) $(CFLAGS) -c $^ -o $@
 $(DEBUG_DIR)/BinarySearchTree.o: BinarySearchTree.cpp
@@ -38,15 +46,15 @@ $(DEBUG_DIR)/SplayTree: $(DEBUG_DIR)/SplayTree_test.o $(DEBUG_DIR)/SplayTree.o $
 	$(cc) $(CFLAGS) $^ -o $@
 
 BinaryTree:
-	make clean && make $(DEBUG_DIR)/BinaryTree && $(DEBUG_DIR)/BinaryTree
+	make $(DEBUG_DIR)/BinaryTree && $(DEBUG_DIR)/BinaryTree
 BinarySearchTree:
-	make clean && make $(DEBUG_DIR)/BinarySearchTree && $(DEBUG_DIR)/BinarySearchTree
+	make $(DEBUG_DIR)/BinarySearchTree && $(DEBUG_DIR)/BinarySearchTree
 RedBlackTree:
-	make clean && make $(DEBUG_DIR)/RedBlackTree && $(DEBUG_DIR)/RedBlackTree
+	make $(DEBUG_DIR)/RedBlackTree && $(DEBUG_DIR)/RedBlackTree
 AVLTree:
-	make clean && make $(DEBUG_DIR)/AVLTree && $(DEBUG_DIR)/AVLTree
+	make $(DEBUG_DIR)/AVLTree && $(DEBUG_DIR)/AVLTree
 SplayTree:
-	make clean && make $(DEBUG_DIR)/SplayTree && $(DEBUG_DIR)/SplayTree
+	make $(DEBUG_DIR)/SplayTree && $(DEBUG_DIR)/SplayTree
 
 clean:
 	-rm -rf $(DEBUG_DIR)
