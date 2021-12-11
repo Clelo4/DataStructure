@@ -1,21 +1,5 @@
 #include "BinarySearchTree.h"
 
-Node *BinarySearchTree::tree_minimum(Node *x) {
-  if (x == NULL)
-    return NULL;
-  while (x->left != NULL)
-    x = x->left;
-  return x;
-}
-
-Node *BinarySearchTree::tree_maxmum(Node *x) {
-  if (x == NULL)
-    return NULL;
-  while (x->right != NULL)
-    x = x->right;
-  return x;
-}
-
 void BinarySearchTree::insert_node(Node *z) {
   if (z == NULL)
     return;
@@ -58,7 +42,7 @@ void BinarySearchTree::delete_node(Node *z) {
   } else if (z->right == NULL) {
     TRANSPLANT(this, z, l);
   } else {
-    Node *y = tree_minimum(r);
+    Node *y = TREE_MINIMUM(r);
     if (z->right != y) {
       Node *yr = y->right;
       TRANSPLANT(this, y, yr);
@@ -74,10 +58,10 @@ void BinarySearchTree::delete_node(Node *z) {
 Node *BinarySearchTree::find_min() {
   if (this->root == NULL)
     return NULL;
-  return tree_minimum(this->root);
+  return TREE_MINIMUM(this->root);
 }
 Node *BinarySearchTree::find_max() {
   if (this->root == NULL)
     return NULL;
-  return tree_maxmum(this->root);
+  return TREE_MAXMUM(this->root);
 }

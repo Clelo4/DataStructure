@@ -125,7 +125,7 @@ void AVLTree::delete_node(Node *z) {
     TRANSPLANT(this, z, l);
     _hot = z->parent;
   } else {
-    Node *y = tree_minimum(r);
+    Node *y = TREE_MINIMUM(r);
     if (z->right != y) {
       _hot = y->parent;
       Node *yr = y->right;
