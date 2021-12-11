@@ -157,8 +157,7 @@ void SplayTree::delete_node(Node *z) {
     Node *y = TREE_MINIMUM(r);
     if (z->right != r) {
       _hot = y->parent;
-      Node *yr = y->right;
-      TRANSPLANT(this, y, yr);
+      TRANSPLANT(this, y, y->right);
       y->right = z->right;
       z->right->parent = y;
     } else {

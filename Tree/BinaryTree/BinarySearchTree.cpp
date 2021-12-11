@@ -44,8 +44,7 @@ void BinarySearchTree::delete_node(Node *z) {
   } else {
     Node *y = TREE_MINIMUM(r);
     if (z->right != y) {
-      Node *yr = y->right;
-      TRANSPLANT(this, y, yr);
+      TRANSPLANT(this, y, y->right);
       y->right = z->right;
       z->right->parent = y;
     }

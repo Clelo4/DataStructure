@@ -24,14 +24,16 @@
 
 #define TRANSPLANT(T, u, v)                                                                                            \
   {                                                                                                                    \
-    if (u->parent == NULL)                                                                                             \
-      T->root = v;                                                                                                     \
-    else if (u == u->parent->left)                                                                                     \
-      u->parent->left = v;                                                                                             \
+    auto _u = u;                                                                                                       \
+    auto _v = v;                                                                                                       \
+    if (_u->parent == NULL)                                                                                            \
+      T->root = _v;                                                                                                    \
+    else if (_u == _u->parent->left)                                                                                   \
+      _u->parent->left = _v;                                                                                           \
     else                                                                                                               \
-      u->parent->right = v;                                                                                            \
+      _u->parent->right = _v;                                                                                          \
     if (v != NULL)                                                                                                     \
-      v->parent = u->parent;                                                                                           \
+      _v->parent = _u->parent;                                                                                         \
   }
 class Node {
 public:
