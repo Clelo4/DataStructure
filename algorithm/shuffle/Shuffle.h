@@ -31,6 +31,15 @@ public:
      * @param result_list 选中的数组元素序列号
      */
     static void weighted_random_sampling(int len, int* weighted_list, int *result_list);
+
+    /**
+     * 蓄水池抽样算法（适用于未知长度的序列、也适用流处理的情况）
+     * @param k 抽样数量
+     * @param result_list 抽样结果
+     * @param flow_list 任意长度的序列，实际上流序列是任意
+     * @param flow_len 序列的长度（实际应该不存在长度，因为序列的长度是任意长度，无法提前知道，这里只是为了方便计算）
+     */
+    static void reservoir_sampling(int k, int *result_list, const int* flow_list, int flow_len);
 };
 
 #endif //SHUFFLE_H

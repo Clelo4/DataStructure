@@ -16,6 +16,7 @@ int main() {
     const int origin_list[] = {1,2,234,35,546,56,76,8798};
     const int len = sizeof(origin_list) / sizeof(int);
     int* result_list = new int[len];
+    int* second_origin_list = new int[len];
 
     print_list("origin: ", origin_list, len);
 
@@ -26,10 +27,14 @@ int main() {
     Shuffle::knuth_shuffle(len, result_list);
     print_list("knuth_shuffle: ", result_list, len);
 
-
-    Shuffle::weighted_random_sampling(len, const_cast<int *>(origin_list), result_list);
+    memcpy(second_origin_list, origin_list, sizeof(int) * len);
+    Shuffle::weighted_random_sampling(len, second_origin_list, result_list);
     print_list("weighted_random_sampling: ", result_list, len);
 
+    Shuffle::reservoir_sampling(3, result_list, origin_list, len);
+    print_list("reservoir_sampling: ", result_list, 3);
+
     delete []result_list;
+    delete []second_origin_list;
     return 0;
 }

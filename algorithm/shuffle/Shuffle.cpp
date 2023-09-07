@@ -64,3 +64,29 @@ void Shuffle::weighted_random_sampling(int len, int *weighted_list, int *result_
         weighted_list[j] = 0;
     }
 }
+
+void Shuffle::reservoir_sampling(int k, int *result_list, const int *flow_list, int flow_len) {
+    srand(time(nullptr));
+
+    int i = 0;
+    for (; i < k; ++i) {
+        // 在每次循环中，i被保留下来的概率是100%
+        result_list[i] = flow_list[i];
+    }
+
+    for (; i < flow_len; ++i) {
+        // 在每次循环中，第i个元素和蓄水池的元素被保留下来的概率都是k/i
+
+        int n = rand() % i;
+        if (n < k) {
+            result_list[n] = flow_list[i];
+        }
+
+        // 分析：
+        // 对于新加入的元素i：被保留的概率是k/i，被丢弃的概率是(i-k)/i
+        // 对于蓄水池的元素，被保留的概率是k/(i-1) * ((i-k)/i + k/i * ((k - 1)/k)) =
+        // k/(i-1) * ((i-k)/i + (k-1)/i) =
+        // k/(i-1) * (i-1)/i =
+        // k/i
+    }
+}
