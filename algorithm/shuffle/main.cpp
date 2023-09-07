@@ -27,13 +27,6 @@ int main() {
     Shuffle::knuth_shuffle(len, result_list);
     print_list("knuth_shuffle: ", result_list, len);
 
-    memcpy(second_origin_list, origin_list, sizeof(int) * len);
-    Shuffle::weighted_random_sampling(len, second_origin_list, result_list);
-    print_list("weighted_random_sampling: ", result_list, len);
-
-    Shuffle::reservoir_sampling(3, result_list, origin_list, len);
-    print_list("reservoir_sampling: ", result_list, 3);
-
     delete []result_list;
     delete []second_origin_list;
     return 0;
