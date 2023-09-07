@@ -2,7 +2,7 @@
 // Created by jack on 5/9/23.
 //
 #include <iostream>
-#include "Shuffle.h"
+#include "RandomSampling.h"
 
 void print_list(const char* describe, const int *list, int len) {
     std::cout << describe;
@@ -20,12 +20,12 @@ int main() {
 
     print_list("origin: ", origin_list, len);
 
-    Shuffle::fisher_yates_origin_shuffle(len, origin_list, result_list);
-    print_list("fisher_yates_origin_shuffle: ", result_list, len);
+    memcpy(second_origin_list, origin_list, sizeof(int) * len);
+    RandomSampling::weighted_random_sampling(len, second_origin_list, 3, result_list);
+    print_list("weighted_random_sampling: ", result_list, 3);
 
-    memcpy(result_list, origin_list, sizeof(int) * len);
-    Shuffle::knuth_shuffle(len, result_list);
-    print_list("knuth_shuffle: ", result_list, len);
+    RandomSampling::reservoir_sampling(3, result_list, origin_list, len);
+    print_list("reservoir_sampling: ", result_list, 3);
 
     delete []result_list;
     delete []second_origin_list;
