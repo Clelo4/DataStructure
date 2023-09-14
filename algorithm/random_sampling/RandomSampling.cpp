@@ -4,9 +4,36 @@
 
 #include <ctime>
 #include <cstdlib>
+#include <cassert>
+#include <vector>
 #include "RandomSampling.h"
 
-void RandomSampling::weighted_random_sampling_base(int n, float *weighted_list, int m, int *result_list) {
+void RandomSampling::weighted_random_sampling_base(int n, const int *weighted_list, int m, int *result_list) {
+    srand(time(nullptr));
+    int total = 0;
+    for (int i = 0; i < n; i++) {
+        total += weighted_list[i];
+    }
+    int* base_list = new int[total];
+    int i = 0;
+    int w_idx = 0;
+    int weight = weighted_list[w_idx];
+    while (i < total) {
+        if (weight == 0) {
+            w_idx++;
+            if (w_idx >= n) break;
+            weight = weighted_list[w_idx];
+        }
+        base_list[i] = w_idx;
+        weight--;
+        i++;
+    }
+    assert(i == total);
+    for (int j = 0; j < m; ++j) {
+        int k = rand() % total;
+        result_list[j] = base_list[k];
+    }
+    delete []base_list;
 }
 
 void RandomSampling::weighted_random_sampling(int n, int *weighted_list, int m, int *result_list) {
@@ -58,6 +85,54 @@ void RandomSampling::reservoir_sampling(int m, int *result_list, const int *flow
     }
 }
 
-void RandomSampling::weighted_random_sampling_bst(int n, int *weighted_list, int m, int *result_list) {
+class Node {
+public:
+    Node* left_child;
+    Node* right_child;
+    int left;
+    int right;
+    int index;
+    Node(int index, int left, int right): left(left), right(right), left_child(nullptr), right_child(nullptr), index(index) {}
+};
 
+Node* build(std::vector<Node*> list, int left, int right) {
+    if (left == right) return nullptr;
+    if (left == right - 1) return list[left];
+    int mid = (left + right) / 2;
+    Node* parent = list[mid];
+    parent->left_child = build(list, left, mid);
+    parent->right_child = build(list, mid + 1, right);
+    return parent;
+}
+
+Node* search(Node* root, int search_key) {
+    if (root == nullptr) return root;
+    if (root->left > search_key) return search(root->left_child, search_key);
+    else if (root->right <= search_key) return search(root->right_child, search_key);
+    return root;
+}
+
+void RandomSampling::weighted_random_sampling_bst(int n, const int *weighted_list, int m, int *result_list) {
+    int total = 0;
+    for (int i = 0; i < n; ++i) {
+        total = weighted_list[i];
+    }
+
+    int pre_sum = 0;
+    std::vector<Node*> node_list;
+    for (int i = 0; i < n; ++i) {
+        int weight = weighted_list[i];
+        Node* cur = new Node(i, pre_sum, pre_sum + weight);
+        pre_sum += weight;
+        node_list.push_back(cur);
+    }
+    int total_weight = pre_sum;
+
+    Node* root = build(node_list, 0, static_cast<int>(node_list.size()));
+
+    srand(time(nullptr) + 1);
+    for (int i = 0; i < m; ++i) {
+        int rand_weight = rand() % total_weight;
+        result_list[i] = search(root, rand_weight)->index;
+    }
 }

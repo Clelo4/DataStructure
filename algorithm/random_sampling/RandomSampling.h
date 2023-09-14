@@ -15,7 +15,7 @@ public:
      * @param m 采样数量
      * @param result_list 采样结果数组
      */
-    static void weighted_random_sampling_base(int n, float* weighted_list, int m, int *result_list);
+    static void weighted_random_sampling_base(int n, const int* weighted_list, int m, int *result_list);
 
     /**
      * 加权不放回随机采样
@@ -29,12 +29,15 @@ public:
 
     /**
      * 加权不放回随机采样（BST实现版本）
+     * 算法复杂度：O(n + m * log(n))
      * @param n 原始权重数组长度
      * @param weighted_list 权重数组
      * @param m 采样数量
      * @param result_list 采样结果数组
      */
-    static void weighted_random_sampling_bst(int n, int* weighted_list, int m, int *result_list);
+    static void weighted_random_sampling_bst(int n, const int* weighted_list, int m, int *result_list);
+
+    static void weighted_random_sample_alias_method(int n, const int* weighted_list, int m, int* result_list);
 
     /**
      * 蓄水池抽样算法（适用于未知长度的序列、也适用流处理的情况）
@@ -47,8 +50,6 @@ public:
     static void reservoir_sampling(int m, int *result_list, const int* flow_list, int n);
 
     static void weighted_random_sampling_alogorithm_a();
-
-    // https://www.keithschwarz.com/darts-dice-coins/
 
     // https://www.keithschwarz.com/darts-dice-coins/
 
