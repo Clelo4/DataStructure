@@ -37,6 +37,8 @@ public:
      */
     static void weighted_random_sampling_bst(int n, const int* weighted_list, int m, int *result_list);
 
+    static void weighted_random_sampling_binary_search(int n, const int* weighted_list, int m, int *result_list);
+
     static void weighted_random_sample_alias_method(int n, const int* weighted_list, int m, int* result_list);
 
     /**

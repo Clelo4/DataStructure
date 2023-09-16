@@ -136,3 +136,43 @@ void RandomSampling::weighted_random_sampling_bst(int n, const int *weighted_lis
         result_list[i] = search(root, rand_weight)->index;
     }
 }
+
+void RandomSampling::weighted_random_sampling_binary_search(int n, const int *weighted_list, int m, int *result_list) {
+    int total_weight = 0;
+    std::vector<int> pre_sum_list;
+    pre_sum_list.push_back(0);
+    for (int i = 0; i < n; ++i) {
+        total_weight += weighted_list[i];
+        pre_sum_list.push_back(total_weight);
+    }
+
+    srand(time(nullptr));
+    for (int i = 0; i < m; ++i) {
+        int k = rand() % total_weight;
+
+        int left = 0, right = static_cast<int>(pre_sum_list.size()) - 1;
+        while (left <= right) {
+            int mid = left + (right - left) / 2;
+            if (pre_sum_list[mid] == k) {
+                left = mid;
+                break;
+            }
+            else if (pre_sum_list[mid] < k) {
+                if (mid == pre_sum_list.size() - 2 || pre_sum_list[mid + 1] >= k) {
+                    left = mid;
+                    break;
+                }
+                if (pre_sum_list[mid + 1] > k) {
+                    left = mid + 1;
+                }
+                // 算法错误
+                exit(-1);
+            }
+            else {
+                right = mid - 1;
+            }
+        }
+
+        result_list[i] = left;
+    }
+}

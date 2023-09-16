@@ -13,7 +13,7 @@ void print_list(const char* describe, const int *list, int len) {
 }
 
 int main() {
-    const int origin_list[] = {100,2,23,35,56,56,76,88};
+    const int origin_list[] = {100,200,23,35,56,56,76,88};
     const int len = sizeof(origin_list) / sizeof(int);
     int* result_list = new int[len];
     int* second_origin_list = new int[len];
@@ -32,6 +32,9 @@ int main() {
 
     RandomSampling::weighted_random_sampling_bst(len, origin_list, len / 2 + 1, result_list);
     print_list("weighted_random_sampling_bst: ", result_list, len / 2 + 1);
+
+    RandomSampling::weighted_random_sampling_binary_search(len, origin_list, len / 2 + 1, result_list);
+    print_list("weighted_random_sampling_binary_search: ", result_list, len / 2 + 1);
 
     delete []result_list;
     delete []second_origin_list;
