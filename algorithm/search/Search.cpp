@@ -3,9 +3,9 @@
 //
 
 #include <cmath>
-#include "search.h"
+#include "Search.h"
 
-int search::binary_search_base_one(int len, int *list, int key) {
+int Search::binary_search_base_one(int len, int *list, int key) {
     int left = 0;
     int right = len - 1;
     while (left <= right) {
@@ -21,10 +21,10 @@ int search::binary_search_base_one(int len, int *list, int key) {
     return -1;
 }
 
-int search::binary_search_base_tow(int len, int *list, int key) {
+int Search::binary_search_base_two(int len, int *list, int key) {
     int left = 0;
     int right = len - 1;
-    while (left != right) {
+    while (left < right) {
         // 向上取整
         int mid = ceil(((double) left + (double) right) / 2);
         if (list[mid] > key) {

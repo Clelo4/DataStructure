@@ -5,7 +5,7 @@
 #ifndef BINARY_SEARCH_SEARCH_H
 #define BINARY_SEARCH_SEARCH_H
 
-class search {
+class Search {
 public:
     /**
      * 二分查找算法（基础版本，找不到返回-1）
@@ -14,7 +14,7 @@ public:
      * @param key 待查找的关键字
      * @return 目标关键字的位置，找不到返回-1
      */
-    int binary_search_base_one(int len, int* list, int key);
+    static int binary_search_base_one(int len, int* list, int key);
 
     /**
      * 二分查找算法（基础版本，找不到返回-1）
@@ -23,7 +23,7 @@ public:
      * @param key 待查找的关键字
      * @return 目标关键字的位置，找不到返回-1
      */
-    int binary_search_base_tow(int len, int* list, int key);
+    static int binary_search_base_two(int len, int* list, int key);
 };
 
 #endif //BINARY_SEARCH_SEARCH_H
