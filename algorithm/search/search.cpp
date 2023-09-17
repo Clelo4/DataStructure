@@ -10,7 +10,7 @@ int search::binary_search_base_one(int len, int *list, int key) {
     int right = len - 1;
     while (left <= right) {
         // 向下取整
-        int mid = floor(((double) left + (double) right) / 2);
+        int mid = (left + right) / 2;
         if (list[mid] == key) return mid;
         else if (list[mid] < key) {
             left = mid + 1;
@@ -26,7 +26,7 @@ int search::binary_search_base_two(int len, int *list, int key) {
     int right = len - 1;
     while (left < right) {
         // 向上取整
-        int mid = ceil(((double) left + (double) right) / 2);
+        int mid = (left + right + 1) / 2;
         if (list[mid] > key) {
             right = mid - 1;
         } else {
@@ -62,12 +62,12 @@ int search::binary_search_base_duplicate_right_most(int len, int *list, int key)
         if (list[mid] == key) {
             left = mid;
         } else if (list[mid] < key) {
-            left = mid + 1;
+            left = mid + 1; // left可能大于right
         } else {
             right = mid - 1;
         }
     }
-    if (list[left] == key) return left;
+    if (list[right] == key) return right;
     else return -1;
 }
 
