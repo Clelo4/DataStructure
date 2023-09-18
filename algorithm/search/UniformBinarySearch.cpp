@@ -26,10 +26,10 @@ int UniformBinarySearch::search(int key) {
         if (list[i] == key) return i;
         if (delta[d] == 0) return -1;
         else {
-            if (list[i] < key) {
-                i += delta[++d];
-            } else {
+            if (key < list[i]) {
                 i -= delta[++d];
+            } else {
+                i += delta[++d];
             }
         }
     };

@@ -7,4 +7,6 @@ add_executable(search main.cpp
         search.cpp
         search.h
         UniformBinarySearch.cpp
-        UniformBinarySearch.h)
+        UniformBinarySearch.h
+        ExponentialSearch.cpp
+        ExponentialSearch.h)

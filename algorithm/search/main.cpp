@@ -2,6 +2,7 @@
 #include <algorithm>
 #include "search.h"
 #include "UniformBinarySearch.h"
+#include "ExponentialSearch.h"
 
 int main() {
     srand(time(nullptr));
@@ -39,8 +40,8 @@ int main() {
     assert(search::binary_search_base_approximate_right_most(len, list, 22) == -1);
     assert(search::binary_search_base_approximate_right_most(len, list, 5) == 4);
 
-    UniformBinarySearch uniformBinarySearch(len, list);
-    for (int i : list) {
-        assert(list[uniformBinarySearch.search(i)] == i);
-    }
+    UniformBinarySearch::test();
+
+    ExponentialSearch::test();
+    ExponentialSearch::testTwo();
 }
