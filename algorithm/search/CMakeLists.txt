@@ -5,4 +5,6 @@ set(CMAKE_CXX_STANDARD 11)
 
 add_executable(search main.cpp
         search.cpp
-        search.h)
+        search.h
+        UniformBinarySearch.cpp
+        UniformBinarySearch.h)
