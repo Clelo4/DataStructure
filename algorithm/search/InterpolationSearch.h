@@ -1,40 +1,22 @@
 //
-// Created by jack on 18/9/23.
+// Created by jack on 20/9/23.
 //
 
-#ifndef BINARY_SEARCH_EXPONENTIALSEARCH_H
-#define BINARY_SEARCH_EXPONENTIALSEARCH_H
+#ifndef BINARY_SEARCH_INTERPOLATIONSEARCH_H
+#define BINARY_SEARCH_INTERPOLATIONSEARCH_H
 
 
 #include <ctime>
 #include <cstdlib>
 #include <algorithm>
 
-class ExponentialSearch {
-public:
-    int n;
+class InterpolationSearch {
+private:
+    int size;
     int* list;
-    explicit ExponentialSearch(int n, int* list);
+    explicit InterpolationSearch(int size, int* list);
+public:
     int search(int key);
-    int searchTwo(int key);
-
-    static void test() {
-        const int n = 10000;
-        int list[n] = {};
-        srand(time(nullptr));
-
-        // 产生随机数
-        for (int i = 0; i < n; ++i) {
-            list[i] = i * i + n * 3 + rand() % n;
-        }
-        std::sort(std::begin(list), std::end(list));
-        ExponentialSearch exponentialSearch(n, list);
-        for (int i = 62; i < 100; ++i) {
-            int key = list[i];
-            int res = exponentialSearch.search(key);
-            assert(list[res] == key);
-        }
-    }
     static void testTwo() {
         const int n = 100000;
         int list[n] = {};
@@ -55,14 +37,14 @@ public:
             list[i] = res;
         }
         std::sort(std::begin(list), std::end(list));
-        ExponentialSearch exponentialSearch(n, list);
+        InterpolationSearch interpolationSearch(n, list);
         for (int i = 0; i < n; ++i) {
             int key = list[i];
-            int res = exponentialSearch.searchTwo(key);
+            int res = interpolationSearch.search(key);
             assert(list[res] == key);
         }
     }
 };
 
 
-#endif //BINARY_SEARCH_EXPONENTIAL-SEARCH_H
+#endif //BINARY_SEARCH_INTERPOLATIONSEARCH_H

@@ -9,4 +9,6 @@ add_executable(search main.cpp
         UniformBinarySearch.cpp
         UniformBinarySearch.h
         ExponentialSearch.cpp
-        ExponentialSearch.h)
+        ExponentialSearch.h
+        InterpolationSearch.cpp
+        InterpolationSearch.h)
