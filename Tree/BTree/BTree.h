@@ -47,7 +47,7 @@ public:
 
 private:
     // 当前B树的度
-    int degree;
+    size_t degree;
     // 树根
     BTreeNode* root;
 
@@ -129,9 +129,9 @@ private:
      * 在keys查找指定key
      * @param keys keys向量
      * @param key 查找目标
-     * @return 返回最小的i，满足keys[i - 1] < key 或 key <= keys[i]
+     * @return 返回最小的i，满足key大于keys[i - 1]且key小于等于keys[i]
      */
-    int binary_search(std::vector<int>& keys, int key);
+    static int binary_search(std::vector<int>& keys, int key);
 };
 
 #endif //DEMO_BTREE_H

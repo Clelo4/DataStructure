@@ -3,8 +3,8 @@
 
 int main() {
 
-    BTree btree(5);
-    for (int i = 1; i < 100; i++) {
+    BTree btree(6);
+    for (int i = 1; i < 2000; i++) {
         btree.insert(i);
     }
     btree.remove(52);
@@ -23,8 +23,14 @@ int main() {
     for (int i = 200; i > 0; i--) {
         btree.remove(i % 2);
     }
-    for (int i = 0; i < 200; i++) {
+    for (int i = 500; i < 700; i++) {
         btree.remove(i);
+    }
+    for (int i = 200; i > 0; i--) {
+        assert(btree.search(i % 2) == nullptr);
+    }
+    for (int i = 500; i < 700; i++) {
+        assert(btree.search(i) == nullptr);
     }
     assert(btree.search(1) == nullptr);
     assert(btree.search(2) == nullptr);

@@ -7,7 +7,7 @@
 BTree::BTreeNode::BTreeNode() = default;
 
 BTree::BTreeNode::~BTreeNode() {
-    for (BTreeNode* child : children) {
+    for (auto* child : children) {
         delete child;
     }
 }
