@@ -3,6 +3,7 @@
 //
 
 #include "BTree.h"
+#include <iostream>
 
 BTree::BTreeNode::BTreeNode() = default;
 
@@ -79,21 +80,10 @@ void BTree::BTree_split_child(BTreeNode* target, int index) const {
     child->keys.resize(degree - 1);
 
     // 将middle_key填入target->keys的index位置
-    if (!target->keys.empty()) {
-        target->keys.push_back(target->keys.back());
-        for (size_t i = target->keys.size() - 1; i > index; i--) {
-            target->keys[i] = target->keys[i - 1];
-        }
-        target->keys[index] = middle_key;
-    }
-    else target->keys.push_back(middle_key);
+    insert_key(middle_key, target, index);
 
-    // 将new_child填入target->children的index位置
-    target->children.push_back(target->children.back());
-    for (size_t i = target->children.size() - 1; i > index + 1; i--) {
-        target->children[i] = target->children[i - 1];
-    }
-    target->children[index + 1] = new_child;
+    // 将new_child填入target->children的index+1位置
+    insert_child(new_child, target, index+1);
 }
 
 void BTree::insert_not_full(int key, BTreeNode* target) {
@@ -102,11 +92,7 @@ void BTree::insert_not_full(int key, BTreeNode* target) {
 
     if (target->is_leaf) {
         // 将key插入到该叶子节点
-        target->keys.push_back(target->keys.back());
-        for (size_t i = target->keys.size() - 1; i > idx; i--) {
-            target->keys[i] = target->keys[i - 1];
-        }
-        target->keys[idx] = key;
+        insert_key(key, target, idx);
     } else {
         BTreeNode* next_target = target->children[idx];
         if (next_target->keys.size() == 2 * degree - 1) {
@@ -138,10 +124,7 @@ bool BTree::remove(int key, BTree::BTreeNode *target) {
     if (target->is_leaf) {
         if (found) {
             // remove keys[i]
-            for (int i = idx; i < len - 1; i++) {
-                keys[i] = keys[i + 1];
-            }
-            keys.resize(len - 1);
+            remove_key(target, idx);
 
             // 重建root
             if (target == root && target->keys.empty()) {
@@ -163,11 +146,14 @@ bool BTree::remove(int key, BTree::BTreeNode *target) {
             } else if (right_sibling->keys.size() >= degree) {
                 target->keys[idx] = remove_first(right_sibling);
             } else {
+                // 合并left_sibling和right_sibling
+
                 // 将当前key和right_sibling的所有key移动到left_sibling
                 left_sibling->keys.push_back(key);
                 for (const auto& move_key : right_sibling->keys) {
                     left_sibling->keys.push_back(move_key);
                 }
+                remove_key(target, idx);
 
                 // 将right_sibling的所有child移动到left_sibling
                 for (const auto& child : right_sibling->children) {
@@ -175,8 +161,6 @@ bool BTree::remove(int key, BTree::BTreeNode *target) {
                 }
                 right_sibling->children.resize(0);
                 delete right_sibling;
-
-                remove_key(target, idx);
                 remove_child(target, idx + 1);
 
                 // 重建root
@@ -195,8 +179,8 @@ bool BTree::remove(int key, BTree::BTreeNode *target) {
             if (next_target->keys.size() >= degree)
                 return remove(key, next_target);
 
-            BTreeNode* left_sibling = (idx > 0) ? children[idx - 1] : nullptr;
-            BTreeNode* right_sibling = (idx < len) ? children[idx + 1] : nullptr;
+            BTreeNode* left_sibling = (idx >= 1) ? children[idx - 1] : nullptr;
+            BTreeNode* right_sibling = (idx + 1 < children.size()) ? children[idx + 1] : nullptr;
 
             if (left_sibling != nullptr && left_sibling->keys.size() >= degree) {
                 // 将keys[idx - 1]插入到next_target的0位置
@@ -205,20 +189,20 @@ bool BTree::remove(int key, BTree::BTreeNode *target) {
                 // 将left_sibling->keys的最后一个元素移动到keys[idx - 1]
                 keys[idx - 1] = left_sibling->keys.back();
                 // 删除left_sibling的最后一个key
-                remove_key(left_sibling, left_sibling->keys.size() - 1);
+                remove_key(left_sibling,  static_cast<int>(left_sibling->keys.size()) - 1);
 
                 if (!left_sibling->is_leaf) {
                     // 将left_sibling->children.back()插入到next_target的0位置
                     insert_child(left_sibling->children.back(), next_target, 0);
 
                     // 删除left_sibling的最后一个child
-                    remove_child(left_sibling, left_sibling->children.size() - 1);
+                    remove_child(left_sibling, static_cast<int>(left_sibling->children.size()) - 1);
                 }
 
                 return remove(key, next_target);
             } else if (right_sibling != nullptr && right_sibling->keys.size() >= degree) {
                 // 将keys[idx]插入到next_target的最后
-                insert_key(keys[idx], next_target, next_target->keys.size());
+                insert_key(keys[idx], next_target, static_cast<int>(next_target->keys.size()));
 
                 // 将right_sibling->keys的第一个元素移动到keys[idx]
                 keys[idx] = right_sibling->keys.front();
@@ -227,7 +211,7 @@ bool BTree::remove(int key, BTree::BTreeNode *target) {
 
                 if (!right_sibling->is_leaf) {
                     // 将right_sibling的第一个child插入到next_target的最后
-                    insert_child(right_sibling->children.front(), next_target, next_target->children.size());
+                    insert_child(right_sibling->children.front(), next_target, static_cast<int>(next_target->children.size()));
 
                     // 删除right_sibling的第一个child
                     remove_child(right_sibling, 0);
@@ -293,45 +277,29 @@ bool BTree::remove(int key, BTree::BTreeNode *target) {
     return false;
 }
 
-void BTree::insert_key(int key, BTree::BTreeNode *target, size_t index) {
-    target->keys.push_back(key);
-
-    for (size_t i = target->keys.size() - 1; i > index; i--) {
-        target->keys[i] = target->keys[i - 1];
-    }
-    target->keys[index] = key;
+void BTree::insert_key(int key, BTree::BTreeNode *target, int index) {
+    target->keys.insert(target->keys.begin() + index, key);
 }
 
-void BTree::insert_child(BTreeNode* child, BTree::BTreeNode *target, size_t index) {
-    target->children.push_back(child);
-
-    for (size_t i = target->keys.size() - 1; i > index; i--) {
-        target->children[i] = target->children[i - 1];
-    }
-    target->children[index] = child;
+void BTree::insert_child(BTreeNode* child, BTree::BTreeNode *target, int index) {
+    target->children.insert(target->children.begin() + index, child);
 }
 
-void BTree::remove_key(BTree::BTreeNode *target, size_t index) {
-    for(size_t i = index; i < target->keys.size() - 1; i++) {
-        target->keys[i] = target->keys[i + 1];
-    }
-    target->keys.pop_back();
+void BTree::remove_key(BTree::BTreeNode *target, int index) {
+    target->keys.erase(target->keys.begin() + index);
 }
 
-void BTree::remove_child(BTree::BTreeNode *target, size_t index) {
-    for(size_t i = index; i < target->children.size() - 1; i++) {
-        target->children[i] = target->children[i + 1];
-    }
-    target->children.pop_back();
+void BTree::remove_child(BTree::BTreeNode *target, int index) {
+    target->children.erase(target->children.begin() + index);
 }
 
 int BTree::remove_last(BTreeNode* target) {
     if (target->is_leaf) {
         const auto res = target->keys.back();
-        remove_key(target, target->keys.size() - 1);
+        remove_key(target, static_cast<int>(target->keys.size()) - 1);
         return res;
     } else {
-        const size_t idx = target->children.size() - 1;
+        const int idx = static_cast<int>(target->children.size()) - 1;
         const auto& next_target = target->children[idx];
         auto* left_sibling = target->children[idx - 1];
 
@@ -339,14 +307,15 @@ int BTree::remove_last(BTreeNode* target) {
         else if (left_sibling->keys.size() >= degree) {
             // 将target->keys[idx - 1]插入next_target的头部
             insert_key(target->keys[idx - 1], next_target, 0);
+            // 将left_sibling的尾部插入target->keys[idx - 1]位置
             target->keys[idx - 1] = left_sibling->keys.back();
             // 删除left_sibling的最后一个key
-            remove_key(left_sibling, left_sibling->keys.size() - 1);
+            remove_key(left_sibling, static_cast<int>(left_sibling->keys.size()) - 1);
 
             if (!left_sibling->is_leaf) {
                 // 将left_sibling的最后一个child移动到next_target的头部
                 insert_child(left_sibling->children.back(), next_target, 0);
-                remove_child(left_sibling, left_sibling->children.size() - 1);
+                remove_child(left_sibling, static_cast<int>(left_sibling->children.size()) - 1);
             }
 
             return remove_last(next_target);
@@ -357,10 +326,14 @@ int BTree::remove_last(BTreeNode* target) {
                 left_sibling->keys.push_back(move_key);
             }
 
+            remove_key(target, idx - 1);
+
             // 移动next_target的children到left_sibling
             for (const auto& child : next_target->children) {
                 left_sibling->children.push_back(child);
             }
+
+            remove_child(target, idx);
 
             next_target->children.resize(0);
             delete next_target;
@@ -376,21 +349,22 @@ int BTree::remove_first(BTreeNode* target) {
         remove_key(target, 0);
         return res;
     } else {
-        const size_t idx = 0;
+        const int idx = 0;
         const auto& next_target = target->children[idx];
         auto* right_sibling = target->children[idx + 1];
 
         if (next_target->keys.size() >= degree) return remove_first(next_target);
         else if (right_sibling->keys.size() >= degree) {
             // 将target->keys[idx]插入next_target的尾部
-            insert_key(target->keys[idx], next_target, next_target->keys.size());
+            insert_key(target->keys[idx], next_target, static_cast<int>(next_target->keys.size()));
+            // right_sibling的头部插入target->keys[idx]的位置
             target->keys[idx] = right_sibling->keys.front();
             // 删除right_sibling的第一个key
             remove_key(right_sibling, 0);
 
             if (!right_sibling->is_leaf) {
                 // 将right_sibling的第一个child移动到next_target的尾部
-                insert_child(right_sibling->children.front(), next_target, next_target->children.size());
+                insert_child(right_sibling->children.front(), next_target, static_cast<int>(next_target->children.size()));
                 remove_child(right_sibling, 0);
             }
 
@@ -402,10 +376,14 @@ int BTree::remove_first(BTreeNode* target) {
                 next_target->keys.push_back(move_key);
             }
 
+            remove_key(target, idx);
+
             // 移动right_sibling的children到next_target
             for (const auto& child : right_sibling->children) {
                 next_target->children.push_back(child);
             }
+
+            remove_child(target, idx + 1);
 
             right_sibling->children.resize(0);
             delete right_sibling;
@@ -428,4 +406,46 @@ int BTree::binary_search(std::vector<int> &keys, int key) {
         }
     }
     return left;
+}
+
+void BTree::test() {
+    BTree btree(6);
+    for (int i = 1; i < 2000; i++) {
+        btree.insert(i);
+    }
+    btree.remove(52);
+    assert(btree.search(52) == nullptr);
+    assert(btree.search(1) != nullptr);
+
+    auto finded = btree.search(30);
+    if (finded != nullptr) {
+        for (auto key : finded->keys) {
+            std::cout << key << " ";
+        }
+        std::cout << std::endl;
+    }
+
+    btree.search(30);
+    for (int i = 200; i > 0; i--) {
+        btree.remove(i);
+    }
+    for (int i = 200; i > 0; i--) {
+        assert(btree.search(i) == nullptr);
+    }
+    for (int i = 200; i > 0; i--) {
+        if (i % 3) {
+            btree.insert(i);
+        }
+    }
+    for (int i = 200; i > 0; i--) {
+        if (i % 3) {
+            assert(btree.search(i) != nullptr);
+        }
+    }
+    for (int i = 500; i < 700; i++) {
+        btree.remove(i);
+    }
+    for (int i = 500; i < 700; i++) {
+        assert(btree.search(i) == nullptr);
+    }
 }

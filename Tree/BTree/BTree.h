@@ -45,10 +45,16 @@ public:
      */
     bool remove(int key);
 
+    static void test();
+
 private:
     // 当前B树的度
-    size_t degree;
+    // 除了根节点，所有节点的孩子数量childNum，满足degree<=childNum<=2*degree
+    // 根节点最少可以有2个孩子（当前仅当根节点不是叶子节点），即2<=childNum<=2*degree
+    int degree;
+
     // 树根
+    // 如果整棵B树只有一个节点（根节点是叶子节点），则该节点的key数量需要满足0<=Keys<=(2 * degree - 1)
     BTreeNode* root;
 
     /**
@@ -87,7 +93,7 @@ private:
      * @param target 目标节点
      * @param index 插入的位置
      */
-    static void insert_key(int key, BTreeNode* target, size_t index);
+    static void insert_key(int key, BTreeNode* target, int index);
 
     /**
      * 将child插入到指定的位置中
@@ -95,21 +101,21 @@ private:
      * @param target 目标节点
      * @param index 插入的位置
      */
-    static void insert_child(BTreeNode* child, BTreeNode* target, size_t index);
+    static void insert_child(BTreeNode* child, BTreeNode* target, int index);
 
     /**
      * 将指定的位置中的key删除
      * @param target 目标节点
      * @param index 要删除的key的位置
      */
-    static void remove_key(BTreeNode* target, size_t index);
+    static void remove_key(BTreeNode* target, int index);
 
     /**
      * 将指定的位置中的child删除
      * @param target 目标节点
      * @param index 要删除的孩子的位置
      */
-    static void remove_child(BTreeNode* target, size_t index);
+    static void remove_child(BTreeNode* target, int index);
 
     /**
      * 删除当前以target为根的树的最后一个孩子
