@@ -87,7 +87,7 @@ void BTree::BTree_split_child(BTreeNode* target, int index) const {
 }
 
 void BTree::insert_not_full(int key, BTreeNode* target) {
-    auto & keys = target->keys;
+    auto& keys = target->keys;
     int idx = binary_search(keys, key);
 
     if (target->is_leaf) {
@@ -137,7 +137,7 @@ bool BTree::remove(int key, BTree::BTreeNode *target) {
         }
         return false;
     } else {
-        auto & children = target->children;
+        auto children = target->children;
         if (found) {
             BTreeNode* left_sibling = children[idx];
             BTreeNode* right_sibling = children[idx + 1];
@@ -175,7 +175,7 @@ bool BTree::remove(int key, BTree::BTreeNode *target) {
 
             return true;
         } else {
-            auto& next_target = children[idx];
+            auto next_target = children[idx];
             if (next_target->keys.size() >= degree)
                 return remove(key, next_target);
 
@@ -300,7 +300,7 @@ int BTree::remove_last(BTreeNode* target) {
         return res;
     } else {
         const int idx = static_cast<int>(target->children.size()) - 1;
-        const auto& next_target = target->children[idx];
+        const auto next_target = target->children[idx];
         auto* left_sibling = target->children[idx - 1];
 
         if (next_target->keys.size() >= degree) return remove_last(next_target);
@@ -350,7 +350,7 @@ int BTree::remove_first(BTreeNode* target) {
         return res;
     } else {
         const int idx = 0;
-        const auto& next_target = target->children[idx];
+        const auto next_target = target->children[idx];
         auto* right_sibling = target->children[idx + 1];
 
         if (next_target->keys.size() >= degree) return remove_first(next_target);
@@ -372,14 +372,14 @@ int BTree::remove_first(BTreeNode* target) {
         } else {
             // 移动target->keys[idx]和right_sibling的所有key到next_target
             next_target->keys.push_back(target->keys[idx]);
-            for (const auto& move_key : right_sibling->keys) {
+            for (const auto move_key : right_sibling->keys) {
                 next_target->keys.push_back(move_key);
             }
 
             remove_key(target, idx);
 
             // 移动right_sibling的children到next_target
-            for (const auto& child : right_sibling->children) {
+            for (const auto child : right_sibling->children) {
                 next_target->children.push_back(child);
             }
 
@@ -393,7 +393,7 @@ int BTree::remove_first(BTreeNode* target) {
     }
 }
 
-int BTree::binary_search(std::vector<int> &keys, int key) {
+int BTree::binary_search(std::vector<int>& keys, int key) {
     const int n = (int) keys.size();
     int left = 0, right = n;
 
@@ -409,8 +409,8 @@ int BTree::binary_search(std::vector<int> &keys, int key) {
 }
 
 void BTree::test() {
-    BTree btree(6);
-    for (int i = 1; i < 2000; i++) {
+    BTree btree(7);
+    for (int i = 1; i < 20000; i++) {
         btree.insert(i);
     }
     btree.remove(52);
@@ -426,18 +426,21 @@ void BTree::test() {
     }
 
     btree.search(30);
-    for (int i = 200; i > 0; i--) {
+    for (int i = 4000; i > 1000; i--) {
         btree.remove(i);
     }
-    for (int i = 200; i > 0; i--) {
+    for (int i = 9000; i > 1000; i--) {
+        btree.remove(i);
+    }
+    for (int i = 4000; i > 1000; i--) {
         assert(btree.search(i) == nullptr);
     }
-    for (int i = 200; i > 0; i--) {
+    for (int i = 10000; i > 900; i--) {
         if (i % 3) {
             btree.insert(i);
         }
     }
-    for (int i = 200; i > 0; i--) {
+    for (int i = 10000; i > 900; i--) {
         if (i % 3) {
             assert(btree.search(i) != nullptr);
         }

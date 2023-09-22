@@ -172,8 +172,8 @@ bool BPlusTree::remove(int key, BTreeNode* target) {
         }
         return false;
     } else {
-        auto & children = target->children;
-        auto& next_target = children[idx];
+        auto& children = target->children;
+        auto next_target = children[idx];
         if (next_target->keys.size() >= degree)
             return remove(key, next_target);
 
@@ -278,9 +278,9 @@ bool BPlusTree::remove(int key, BTreeNode* target) {
                 left_sibling->next = next_target->next;
             }
 
-//            // 删除next_target节点
-//            next_target->children.resize(0);
-//            delete next_target;
+            // 删除next_target节点
+            next_target->children.resize(0);
+            delete next_target;
         } else if (right_sibling != nullptr) {
             if (!next_target->is_leaf)
                 next_target->keys.push_back(keys[idx]);
@@ -309,9 +309,9 @@ bool BPlusTree::remove(int key, BTreeNode* target) {
                 next_target->next = right_sibling->next;
             }
 
-//            // 删除right_sibling节点
-//            right_sibling->children.resize(0);
-//            delete right_sibling;
+            // 删除right_sibling节点
+            right_sibling->children.resize(0);
+            delete right_sibling;
         }
 
         // 重建root
@@ -352,11 +352,11 @@ void BPlusTree::remove_value(BTreeNode *target, int index) {
 
 void BPlusTree::test() {
     BPlusTree btree(6);
-    for (int i = 1; i < 2000; i++) {
+    for (int i = 1; i < 20000; i++) {
         btree.insert(i, i);
     }
 
-    for (int i = 1; i < 2000; i++) {
+    for (int i = 100; i < 20000; i++) {
         assert(btree.search(i) != nullptr);
     }
 
@@ -373,10 +373,10 @@ void BPlusTree::test() {
     }
 
     btree.search(30);
-    for (int i = 200; i > 0; i--) {
+    for (int i = 2000; i > 100; i--) {
         btree.remove(i);
     }
-    for (int i = 200; i > 0; i--) {
+    for (int i = 2000; i > 100; i--) {
         assert(btree.search(i) == nullptr);
     }
     for (int i = 200; i > 0; i--) {
@@ -395,9 +395,4 @@ void BPlusTree::test() {
     for (int i = 500; i < 700; i++) {
         assert(btree.search(i) == nullptr);
     }
-}
-
-int BPlusTree::get_last_key(BTreeNode *target) {
-    if (target->is_leaf) return target->keys.back();
-    else return get_last_key(target->children.back());
 }
