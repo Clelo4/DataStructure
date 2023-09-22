@@ -158,7 +158,7 @@ bool BPlusTree::remove(int key, BTreeNode* target) {
         if (found) {
             // remove keys[i]
             remove_key(target, idx);
-            //
+            // remove values[i]
             remove_value(target, idx);
 
             // 重建root
@@ -181,47 +181,63 @@ bool BPlusTree::remove(int key, BTreeNode* target) {
         BTreeNode* right_sibling = (idx + 1 < children.size()) ? children[idx + 1] : nullptr;
 
         if (left_sibling != nullptr && left_sibling->keys.size() >= degree) {
-            // 将left_sibling.back()插入到next_target的0位置
-            insert_key(left_sibling->keys.back(), next_target, 0);
-
-            // 将left_sibling->keys的最后一个元素移动到keys[idx - 1]
-            keys[idx - 1] = left_sibling->keys.back();
-            // 删除left_sibling的最后一个key
-            remove_key(left_sibling,  static_cast<int>(left_sibling->keys.size()) - 1);
-
             if (!left_sibling->is_leaf) {
+                // 将keys[idx - 1]插入到next_target的0位置
+                insert_key(keys[idx - 1], next_target, 0);
+
+                // 将left_sibling->keys的最后一个元素移动到keys[idx - 1]
+                keys[idx - 1] = left_sibling->keys.back();
+                // 删除left_sibling的最后一个key
+                remove_key(left_sibling,  static_cast<int>(left_sibling->keys.size()) - 1);
+
                 // 将left_sibling->children.back()插入到next_target的0位置
                 insert_child(left_sibling->children.back(), next_target, 0);
 
                 // 删除left_sibling的最后一个child
                 remove_child(left_sibling, static_cast<int>(left_sibling->children.size()) - 1);
             } else {
+                // 将left_sibling.back()插入到next_target的0位置
+                insert_key(left_sibling->keys.back(), next_target, 0);
+
+                // 删除left_sibling的最后一个key
+                remove_key(left_sibling,  static_cast<int>(left_sibling->keys.size()) - 1);
+
+                keys[idx - 1] = left_sibling->keys.back();
+
                 // 将left_sibling->values.back()插入到next_target的0位置
                 insert_value(left_sibling->values.back(), next_target, 0);
+
                 // 删除left_sibling的最后一个values
                 remove_value(left_sibling, static_cast<int>(left_sibling->values.size()) - 1);
             }
 
+
             return remove(key, next_target);
         } else if (right_sibling != nullptr && right_sibling->keys.size() >= degree) {
-            // 将right_sibling->keys.front()插入到next_target的最后
-            insert_key(right_sibling->keys.front(), next_target, static_cast<int>(next_target->keys.size()));
-
-            // 将right_sibling->keys的第一个元素移动到keys[idx]
-            keys[idx] = right_sibling->keys.front();
-            // 将next_target的最后一个key移动到keys[idx]
-            // keys[idx] = get_last_key(next_target);
-
-            // 删除right_sibling的第一个key
-            remove_key(right_sibling, 0);
-
             if (!right_sibling->is_leaf) {
+                // 将keys[idx]插入到next_target的最后
+                insert_key(keys[idx], next_target, static_cast<int>(next_target->keys.size()));
+
+                // 将right_sibling->keys的第一个元素移动到keys[idx]
+                keys[idx] = right_sibling->keys.front();
+                // 删除right_sibling的第一个key
+                remove_key(right_sibling, 0);
+
                 // 将right_sibling的第一个child插入到next_target的最后
                 insert_child(right_sibling->children.front(), next_target, static_cast<int>(next_target->children.size()));
 
                 // 删除right_sibling的第一个child
                 remove_child(right_sibling, 0);
             } else {
+                // 将right_sibling->keys.front()插入到next_target的最后
+                insert_key(right_sibling->keys.front(), next_target, static_cast<int>(next_target->keys.size()));
+
+                // 将next_target->keys的最后一个元素移动到keys[idx]
+                keys[idx] = next_target->keys.back();
+
+                // 删除right_sibling的第一个key
+                remove_key(right_sibling, 0);
+
                 // 将right_sibling的第一个value插入到next_target的最后
                 insert_value(right_sibling->values.front(), next_target, static_cast<int>(next_target->values.size()));
 
@@ -237,17 +253,16 @@ bool BPlusTree::remove(int key, BTreeNode* target) {
         if (left_sibling != nullptr) {
             if (!next_target->is_leaf)
                 left_sibling->keys.push_back(keys[idx - 1]);
-            for (const auto & move_key : next_target->keys) {
+            for (const auto move_key : next_target->keys) {
                 left_sibling->keys.push_back(move_key);
-
             }
 
             if (!next_target->is_leaf) {
-                for (auto & child : next_target->children) {
+                for (auto child : next_target->children) {
                     left_sibling->children.push_back(child);
                 }
             } else {
-                for (auto & value : next_target->values) {
+                for (auto value : next_target->values) {
                     left_sibling->values.push_back(value);
                 }
             }
@@ -263,23 +278,22 @@ bool BPlusTree::remove(int key, BTreeNode* target) {
                 left_sibling->next = next_target->next;
             }
 
-            // 删除next_target节点
-            next_target->children.resize(0);
-            delete next_target;
+//            // 删除next_target节点
+//            next_target->children.resize(0);
+//            delete next_target;
         } else if (right_sibling != nullptr) {
             if (!next_target->is_leaf)
                 next_target->keys.push_back(keys[idx]);
-
-            for (const auto & move_key : right_sibling->keys) {
+            for (const auto move_key : right_sibling->keys) {
                 next_target->keys.push_back(move_key);
             }
 
             if (!next_target->is_leaf) {
-                for (const auto &child: right_sibling->children) {
+                for (const auto child: right_sibling->children) {
                     next_target->children.push_back(child);
                 }
             } else {
-                for (const auto &value: right_sibling->values) {
+                for (const auto value: right_sibling->values) {
                     next_target->values.push_back(value);
                 }
             }
@@ -295,9 +309,9 @@ bool BPlusTree::remove(int key, BTreeNode* target) {
                 next_target->next = right_sibling->next;
             }
 
-            // 删除right_sibling节点
-            right_sibling->children.resize(0);
-            delete right_sibling;
+//            // 删除right_sibling节点
+//            right_sibling->children.resize(0);
+//            delete right_sibling;
         }
 
         // 重建root
@@ -341,6 +355,11 @@ void BPlusTree::test() {
     for (int i = 1; i < 2000; i++) {
         btree.insert(i, i);
     }
+
+    for (int i = 1; i < 2000; i++) {
+        assert(btree.search(i) != nullptr);
+    }
+
     btree.remove(52);
     assert(btree.search(52) == nullptr);
     assert(btree.search(1) != nullptr);
@@ -360,22 +379,22 @@ void BPlusTree::test() {
     for (int i = 200; i > 0; i--) {
         assert(btree.search(i) == nullptr);
     }
-//    for (int i = 200; i > 0; i--) {
-//        if (i % 3) {
-//            btree.insert(i, i);
-//        }
-//    }
-//    for (int i = 200; i > 0; i--) {
-//        if (i % 3) {
-//            assert(btree.search(i) != nullptr);
-//        }
-//    }
-//    for (int i = 500; i < 700; i++) {
-//        btree.remove(i);
-//    }
-//    for (int i = 500; i < 700; i++) {
-//        assert(btree.search(i) == nullptr);
-//    }
+    for (int i = 200; i > 0; i--) {
+        if (i % 3) {
+            btree.insert(i, i);
+        }
+    }
+    for (int i = 200; i > 0; i--) {
+        if (i % 3) {
+            assert(btree.search(i) != nullptr);
+        }
+    }
+    for (int i = 500; i < 700; i++) {
+        btree.remove(i);
+    }
+    for (int i = 500; i < 700; i++) {
+        assert(btree.search(i) == nullptr);
+    }
 }
 
 int BPlusTree::get_last_key(BTreeNode *target) {
