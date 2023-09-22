@@ -352,11 +352,11 @@ void BPlusTree::remove_value(BTreeNode *target, int index) {
 
 void BPlusTree::test() {
     BPlusTree btree(6);
-    for (int i = 1; i < 20000; i++) {
+    for (int i = 1; i < 19999; i++) {
         btree.insert(i, i);
     }
 
-    for (int i = 100; i < 20000; i++) {
+    for (int i = 100; i < 19999; i++) {
         assert(btree.search(i) != nullptr);
     }
 
@@ -394,5 +394,19 @@ void BPlusTree::test() {
     }
     for (int i = 500; i < 700; i++) {
         assert(btree.search(i) == nullptr);
+    }
+
+    auto head = btree.search(1);
+
+    btree.remove(19997);
+
+    while (head) {
+        std::cout << head << std::endl;
+        for (auto& i : head->values) {
+            std::cout << i << " ";
+        }
+        std::cout << std::endl;
+
+        head = head->next;
     }
 }

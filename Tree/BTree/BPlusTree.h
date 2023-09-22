@@ -131,8 +131,6 @@ private:
      * @return 返回最小的i，满足key大于keys[i - 1]且key小于等于keys[i]
      */
     static int binary_search(std::vector<int>& keys, int key);
-
-    static int get_last_key(BTreeNode* target);
 };
 
 
