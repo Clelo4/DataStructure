@@ -7,4 +7,6 @@ add_executable(btree main.cpp
         BTree.cpp
         BTree.h
         BPlusTree.h
-        BPlusTree.cpp)
+        BPlusTree.cpp
+        BStarTree.h
+        BStarTree.cpp)

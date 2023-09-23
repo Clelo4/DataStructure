@@ -224,11 +224,11 @@ bool BTree::remove(int key, BTree::BTreeNode *target) {
 
             if (left_sibling != nullptr) {
                 left_sibling->keys.push_back(keys[idx - 1]);
-                for (const auto & move_key : next_target->keys) {
+                for (const auto& move_key : next_target->keys) {
                     left_sibling->keys.push_back(move_key);
                 }
 
-                for (auto & child : next_target->children) {
+                for (auto& child : next_target->children) {
                     left_sibling->children.push_back(child);
                 }
 
@@ -244,11 +244,11 @@ bool BTree::remove(int key, BTree::BTreeNode *target) {
                 real_next_target = left_sibling;
             } else if (right_sibling != nullptr) {
                 next_target->keys.push_back(keys[idx]);
-                for (const auto & move_key : right_sibling->keys) {
+                for (const auto& move_key : right_sibling->keys) {
                     next_target->keys.push_back(move_key);
                 }
 
-                for (const auto & child : right_sibling->children) {
+                for (const auto& child : right_sibling->children) {
                     next_target->children.push_back(child);
                 }
 
