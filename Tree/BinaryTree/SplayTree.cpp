@@ -38,6 +38,8 @@
     }                                                                                                                  \
   }
 
+// 伸展树最显著的缺点是它有可能会变成一条链
+// 利用双层延展，能减少上述情况的发生
 void SplayTree::_splay(Node *z) {
   if (z == NULL)
     return;

@@ -3,6 +3,9 @@
 #include <stdlib.h>
 #include "BinarySearchTree.h"
 
+/**
+ * AVL树，左右子树的高度差不超过1
+ */
 class AVLTree : public BinarySearchTree {
 public:
   void insert_node(Node *);
